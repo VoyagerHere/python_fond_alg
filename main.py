@@ -46,10 +46,10 @@ def algorithm(n: int, m: int, s: float, bond_info: list[tuple[str, str, float, i
     return purchased_bonds
 
 
-def calculate_income(bond: tuple[str, str, float, int], coupon_add: int = 0) -> float:
+def calculate_income(bond: tuple[str, str, float, int], coupon_days: int = 0) -> int:
     day, bond_name, price, lot_size = bond
-    cost = lot_size * (price / 100 * 1000)
-    coupon = (lot_size + coupon_add) * 30
+    cost = int(lot_size * (price * 10))
+    coupon = lot_size * coupon_days
     price = 1000 * lot_size
     income = price - cost + coupon
     return income
@@ -61,9 +61,11 @@ if __name__ == '__main__':
     start_time = time.time()
     purchased_bonds: list[tuple[str, str, float, int]] = algorithm(n, m, s, bond_info)
 
-    total_income: float = 0
+    total_income: int = 0
+
     for bond in purchased_bonds:
-        income = calculate_income(bond)
+        coupon_days = n - int(bond[0]) + 30
+        income = calculate_income(bond, coupon_days)
         total_income += income
     print(total_income)
     for bond_day, bond_name, price, lot_size in purchased_bonds:
